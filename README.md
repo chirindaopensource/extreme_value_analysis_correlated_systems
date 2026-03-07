@@ -91,7 +91,7 @@ $$ \tilde{R}_k(t) = R_k(t) / V_k(t \pmod{T_{\text{day}}}) $$
 Below is a diagram which summarizes the proposed approach:
 
 <div align="center">
-  <img src="https://github.com/chirindaopensource/extreme_value_analysis_correlated_systems/blob/main/extreme_value_analysis_correlated_systems_ipo_main.png" alt="Orthogonalized Tail-Risk Engine Architecture" width="100%">
+  <img src="https://github.com/chirindaopensource/extreme_value_analysis_correlated_systems/blob/main/extreme_value_analysis_correlated_systems_ipo_main_three.png" alt="Orthogonalized Tail-Risk Engine Architecture" width="100%">
 </div>
 
 ## Features
