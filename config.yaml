@@ -1,0 +1,1048 @@
+﻿# ==============================================================================
+# MASTER STUDY CONFIGURATION FILE
+# Paper: "Extreme Value Analysis for Finite, Multivariate and Correlated Systems
+#         with Finance as an Example"
+# Format: YAML
+# ==============================================================================
+
+# ==============================================================================
+# EXPLICITLY NOT APPLICABLE COMPONENTS
+# ==============================================================================
+not_applicable_components:
+  # Not applicable; the manuscript is a statistical pipeline, not a neural-network study.
+  network_architecture: null
+  # Not applicable; no prompt engineering is part of the manuscript.
+  prompt_template: null
+  # Not applicable; no LLM is used in the manuscript.
+  llm_settings: null
+
+# ==============================================================================
+# RAW UNPROCESSED INPUT DATA STRUCTURE SCHEMAS
+# ==============================================================================
+raw_unprocessed_data_schema:
+  description: "High-fidelity representation of the raw, asynchronous quote data used to construct midpoint prices on a 1-second grid."
+  source: "Section 3.1 and Eq. (12) in the manuscript."
+  
+  expected_dtypes:
+    DATE: "datetime64[ns]"
+    TIME_M: "timedelta64[ns]"
+    SYM_ROOT: "category"
+    EX: "category"
+    BID: "float64"
+    BIDSIZ: "int64"
+    ASK: "float64"
+    ASKSIZ: "int64"
+    QU_COND: "category"
+    RAW_ROW_ORDER: "int64"
+    
+  required_sort_order_before_processing:
+    - "DATE"
+    - "SYM_ROOT"
+    - "TIME_M"
+    - "RAW_ROW_ORDER"
+    
+  example_raw_dataframe_dict:
+    DATE:
+      - "2014-01-02"
+      - "2014-01-02"
+      - "2014-01-02"
+      - "2014-01-02"
+      - "2014-01-02"
+      - "2014-01-02"
+      - "2014-01-02"
+      - "2014-01-02"
+      - "2014-01-02"
+      - "2014-01-02"
+    TIME_M:
+      - "09:39:59.998"
+      - "09:40:00.012"
+      - "09:40:00.045"
+      - "09:40:00.045"
+      - "09:40:00.102"
+      - "09:40:00.890"
+      - "09:40:01.005"
+      - "09:40:01.150"
+      - "09:40:01.155"
+      - "09:40:01.800"
+    SYM_ROOT:
+      - "AAPL"
+      - "AAPL"
+      - "XOM"
+      - "AAPL"
+      - "GE"
+      - "GE"
+      - "AAPL"
+      - "XOM"
+      - "CVX"
+      - "GE"
+    EX:
+      - "N"
+      - "N"
+      - "N"
+      - "P"
+      - "N"
+      - "T"
+      - "N"
+      - "N"
+      - "N"
+      - "N"
+    BID:
+      - 553.11
+      - 553.12
+      - 99.45
+      - 553.13
+      - 27.10
+      - 27.10
+      - 553.13
+      - 99.45
+      - 112.01
+      - 27.11
+    BIDSIZ:
+      - 100
+      - 100
+      - 500
+      - 100
+      - 1000
+      - 500
+      - 100
+      - 500
+      - 200
+      - 1000
+    ASK:
+      - 553.18
+      - 553.18
+      - 99.48
+      - 553.18
+      - 27.12
+      - 27.13
+      - 553.17
+      - 99.47
+      - 112.05
+      - 27.12
+    ASKSIZ:
+      - 200
+      - 200
+      - 100
+      - 200
+      - 1500
+      - 1000
+      - 100
+      - 100
+      - 300
+      - 1200
+    QU_COND:
+      - "R"
+      - "R"
+      - "R"
+      - "R"
+      - "R"
+      - "R"
+      - "R"
+      - "R"
+      - "R"
+      - "R"
+    RAW_ROW_ORDER:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+
+# ==============================================================================
+# NON-DATA STRUCTURE INPUT PARAMETERS
+# ==============================================================================
+algorithmic_parameters:
+
+  # ------------------------------------------------------------------------------
+  # DATA PREPROCESSING AND SAMPLE DEFINITION
+  # ------------------------------------------------------------------------------
+  data_preprocessing:
+    # Explicit in manuscript.
+    K_assets: 479
+    # Explicit in manuscript.
+    index_universe_parent: "S&P500"
+    # Explicit in manuscript.
+    target_year: 2014
+
+    # Explicit in manuscript appendix; this exact order should be preserved.
+    asset_universe_exact_appendix_order:
+      - "A"
+      - "AA"
+      - "AAPL"
+      - "ABBV"
+      - "ABC"
+      - "ABT"
+      - "ACE"
+      - "ACN"
+      - "ACT"
+      - "ADBE"
+      - "ADI"
+      - "ADM"
+      - "ADP"
+      - "ADS"
+      - "ADSK"
+      - "ADT"
+      - "AEE"
+      - "AEP"
+      - "AES"
+      - "AET"
+      - "AFL"
+      - "AGN"
+      - "AIG"
+      - "AIV"
+      - "AIZ"
+      - "AKAM"
+      - "ALL"
+      - "ALLE"
+      - "ALTR"
+      - "ALXN"
+      - "AMAT"
+      - "AME"
+      - "AMGN"
+      - "AMP"
+      - "AMT"
+      - "AMZN"
+      - "AN"
+      - "AON"
+      - "APA"
+      - "APC"
+      - "APD"
+      - "APH"
+      - "ARG"
+      - "ATI"
+      - "AVB"
+      - "AVP"
+      - "AVY"
+      - "AXP"
+      - "AZO"
+      - "BA"
+      - "BAC"
+      - "BAX"
+      - "BBBY"
+      - "BBT"
+      - "BBY"
+      - "BCR"
+      - "BDX"
+      - "BEN"
+      - "BHI"
+      - "BIIB"
+      - "BK"
+      - "BLK"
+      - "BLL"
+      - "BMY"
+      - "BRCM"
+      - "BSX"
+      - "BWA"
+      - "BXP"
+      - "C"
+      - "CA"
+      - "CAG"
+      - "CAH"
+      - "CAM"
+      - "CAT"
+      - "CB"
+      - "CBG"
+      - "CBS"
+      - "CCE"
+      - "CCI"
+      - "CCL"
+      - "CELG"
+      - "CERN"
+      - "CF"
+      - "CFN"
+      - "CHK"
+      - "CHRW"
+      - "CI"
+      - "CINF"
+      - "CL"
+      - "CLX"
+      - "CMA"
+      - "CMCSA"
+      - "CME"
+      - "CMG"
+      - "CMI"
+      - "CMS"
+      - "CNP"
+      - "CNX"
+      - "COF"
+      - "COG"
+      - "COH"
+      - "COL"
+      - "COP"
+      - "COST"
+      - "COV"
+      - "CPB"
+      - "CRM"
+      - "CSC"
+      - "CSCO"
+      - "CSX"
+      - "CTAS"
+      - "CTL"
+      - "CTSH"
+      - "CTXS"
+      - "CVC"
+      - "CVS"
+      - "CVX"
+      - "D"
+      - "DAL"
+      - "DD"
+      - "DE"
+      - "DFS"
+      - "DG"
+      - "DGX"
+      - "DHI"
+      - "DHR"
+      - "DIS"
+      - "DISCA"
+      - "DLPH"
+      - "DLTR"
+      - "DNB"
+      - "DNR"
+      - "DO"
+      - "DOV"
+      - "DOW"
+      - "DPS"
+      - "DRI"
+      - "DTE"
+      - "DTV"
+      - "DUK"
+      - "DVA"
+      - "DVN"
+      - "EA"
+      - "EBAY"
+      - "ECL"
+      - "ED"
+      - "EFX"
+      - "EIX"
+      - "EL"
+      - "EMC"
+      - "EMN"
+      - "EMR"
+      - "EOG"
+      - "EQR"
+      - "EQT"
+      - "ESRX"
+      - "ESV"
+      - "ETFC"
+      - "ETN"
+      - "ETR"
+      - "EW"
+      - "EXC"
+      - "EXPD"
+      - "EXPE"
+      - "F"
+      - "FAST"
+      - "FB"
+      - "FCX"
+      - "FDO"
+      - "FDX"
+      - "FE"
+      - "FFIV"
+      - "FIS"
+      - "FISV"
+      - "FITB"
+      - "FLIR"
+      - "FLR"
+      - "FLS"
+      - "FMC"
+      - "FOSL"
+      - "FOXA"
+      - "FSLR"
+      - "FTI"
+      - "FTR"
+      - "GAS"
+      - "GCI"
+      - "GD"
+      - "GE"
+      - "GGP"
+      - "GILD"
+      - "GIS"
+      - "GLW"
+      - "GM"
+      - "GME"
+      - "GNW"
+      - "GOOG"
+      - "GPC"
+      - "GPS"
+      - "GRMN"
+      - "GS"
+      - "GT"
+      - "GWW"
+      - "HAL"
+      - "HAR"
+      - "HAS"
+      - "HBAN"
+      - "HCBK"
+      - "HCN"
+      - "HCP"
+      - "HD"
+      - "HES"
+      - "HIG"
+      - "HOG"
+      - "HON"
+      - "HOT"
+      - "HP"
+      - "HPQ"
+      - "HRB"
+      - "HRL"
+      - "HRS"
+      - "HSP"
+      - "HST"
+      - "HSY"
+      - "HUM"
+      - "IBM"
+      - "ICE"
+      - "IFF"
+      - "INTC"
+      - "INTU"
+      - "IP"
+      - "IPG"
+      - "IR"
+      - "IRM"
+      - "ISRG"
+      - "ITW"
+      - "IVZ"
+      - "JCI"
+      - "JEC"
+      - "JNJ"
+      - "JNPR"
+      - "JOY"
+      - "JPM"
+      - "JWN"
+      - "K"
+      - "KEY"
+      - "KIM"
+      - "KLAC"
+      - "KMB"
+      - "KMI"
+      - "KMX"
+      - "KO"
+      - "KR"
+      - "KRFT"
+      - "KSS"
+      - "KSU"
+      - "L"
+      - "LB"
+      - "LEG"
+      - "LEN"
+      - "LH"
+      - "LIFE"
+      - "LLL"
+      - "LLTC"
+      - "LLY"
+      - "LM"
+      - "LMT"
+      - "LNC"
+      - "LO"
+      - "LOW"
+      - "LRCX"
+      - "LUK"
+      - "LUV"
+      - "LYB"
+      - "M"
+      - "MA"
+      - "MAC"
+      - "MAR"
+      - "MAS"
+      - "MAT"
+      - "MCD"
+      - "MCHP"
+      - "MCK"
+      - "MCO"
+      - "MDLZ"
+      - "MDT"
+      - "MET"
+      - "MHFI"
+      - "MHK"
+      - "MJN"
+      - "MKC"
+      - "MMC"
+      - "MMM"
+      - "MNST"
+      - "MO"
+      - "MON"
+      - "MOS"
+      - "MPC"
+      - "MRK"
+      - "MRO"
+      - "MS"
+      - "MSFT"
+      - "MSI"
+      - "MTB"
+      - "MU"
+      - "MUR"
+      - "MWV"
+      - "MYL"
+      - "NBR"
+      - "NDAQ"
+      - "NE"
+      - "NEE"
+      - "NEM"
+      - "NFLX"
+      - "NFX"
+      - "NI"
+      - "NKE"
+      - "NLSN"
+      - "NOC"
+      - "NOV"
+      - "NRG"
+      - "NSC"
+      - "NTAP"
+      - "NTRS"
+      - "NUE"
+      - "NVDA"
+      - "NWL"
+      - "NWSA"
+      - "OI"
+      - "OKE"
+      - "OMC"
+      - "ORCL"
+      - "ORLY"
+      - "OXY"
+      - "PAYX"
+      - "PBCT"
+      - "PBI"
+      - "PCAR"
+      - "PCG"
+      - "PCL"
+      - "PCLN"
+      - "PCP"
+      - "PDCO"
+      - "PEG"
+      - "PEP"
+      - "PETM"
+      - "PFE"
+      - "PFG"
+      - "PG"
+      - "PGR"
+      - "PH"
+      - "PHM"
+      - "PKI"
+      - "PLD"
+      - "PLL"
+      - "PM"
+      - "PNC"
+      - "PNR"
+      - "PNW"
+      - "POM"
+      - "PPG"
+      - "PPL"
+      - "PRGO"
+      - "PRU"
+      - "PSA"
+      - "PSX"
+      - "PVH"
+      - "PWR"
+      - "PX"
+      - "PXD"
+      - "QCOM"
+      - "QEP"
+      - "R"
+      - "RAI"
+      - "RDC"
+      - "REGN"
+      - "RF"
+      - "RHI"
+      - "RHT"
+      - "RIG"
+      - "RL"
+      - "ROK"
+      - "ROP"
+      - "ROST"
+      - "RRC"
+      - "RSG"
+      - "RTN"
+      - "SBUX"
+      - "SCG"
+      - "SCHW"
+      - "SE"
+      - "SEE"
+      - "SHW"
+      - "SIAL"
+      - "SJM"
+      - "SLB"
+      - "SNA"
+      - "SNDK"
+      - "SNI"
+      - "SO"
+      - "SPG"
+      - "SPLS"
+      - "SRCL"
+      - "SRE"
+      - "STI"
+      - "STJ"
+      - "STT"
+      - "STX"
+      - "STZ"
+      - "SWK"
+      - "SWN"
+      - "SWY"
+      - "SYK"
+      - "SYMC"
+      - "SYY"
+      - "T"
+      - "TAP"
+      - "TDC"
+      - "TE"
+      - "TEG"
+      - "TEL"
+      - "TGT"
+      - "THC"
+      - "TIF"
+      - "TJX"
+      - "TMK"
+      - "TMO"
+      - "TRIP"
+      - "TROW"
+      - "TRV"
+      - "TSN"
+      - "TSO"
+      - "TSS"
+      - "TWC"
+      - "TWX"
+      - "TXN"
+      - "TXT"
+      - "TYC"
+      - "UNH"
+      - "UNM"
+      - "UNP"
+      - "UPS"
+      - "URBN"
+      - "USB"
+      - "UTX"
+      - "V"
+      - "VAR"
+      - "VFC"
+      - "VIAB"
+      - "VLO"
+      - "VMC"
+      - "VNO"
+      - "VRSN"
+      - "VRTX"
+      - "VTR"
+      - "VZ"
+      - "WAG"
+      - "WAT"
+      - "WDC"
+      - "WEC"
+      - "WFC"
+      - "WFM"
+      - "WHR"
+      - "WIN"
+      - "WM"
+      - "WMB"
+      - "WMT"
+      - "WU"
+      - "WY"
+      - "WYN"
+      - "WYNN"
+      - "XEL"
+      - "XL"
+      - "XLNX"
+      - "XOM"
+      - "XRAY"
+      - "XRX"
+      - "XYL"
+      - "YHOO"
+      - "YUM"
+
+    # Explicit reproduction convention; preserves matrix row order.
+    asset_row_order_policy: "appendix_order"
+    
+    # Explicit in manuscript.
+    excluded_dates:
+      - "2014-12-24"
+      - "2014-11-28"
+      - "2014-07-03"
+      
+    # Explicit in manuscript; treat as a validation invariant.
+    N_days_expected_after_filters: 248
+    
+    # Explicitly implied by discarding first 10 minutes.
+    session_start_inclusive: "09:40:00"
+    
+    # Explicit in manuscript discussion of closing-imbalance dissemination.
+    session_end_exclusive: "15:45:00"
+    
+    # Explicit in manuscript.
+    discard_open_minutes: 10
+    
+    # Explicit in manuscript.
+    discard_close_minutes: 15
+    
+    # Unspecified in manuscript; rational placeholder for exchange-local clock.
+    market_timezone: "America/New_York"
+    
+    # Explicit in manuscript.
+    delta_t_seconds: 1
+    
+    # Derived from 09:40:00 inclusive to 15:45:00 exclusive; manuscript prints return-interval count, not timestamp count.
+    price_grid_timestamps_per_day_expected: 21900
+    
+    # Explicit in manuscript.
+    return_intervals_per_day_expected: 21899
+    
+    # Explicit in manuscript.
+    T_total_return_intervals_expected: 5430952
+    
+    # Explicit in manuscript.
+    overnight_returns_included: false
+    
+    # Derived from manuscript and required for exact dimensional consistency.
+    T_day_interpretation: "counts 1-second return intervals, not midpoint timestamps"
+
+  # ------------------------------------------------------------------------------
+  # QUOTE CLEANING AND 1-SECOND SYNCHRONIZATION
+  # ------------------------------------------------------------------------------
+  quote_cleaning_and_synchronization:
+    # Required operationally for deterministic within-second last-observation selection.
+    raw_row_order_field: "RAW_ROW_ORDER"
+    
+    # Unspecified in manuscript; rational placeholder. Do not alter without exact TAQ feed documentation.
+    quote_feed_scope: "as_provided_in_taq_quote_file"
+    
+    # Unspecified in manuscript; rational placeholder. Keep all records in the provided quote feed unless feed scope is explicitly frozen otherwise.
+    primary_exchange_filter: null
+    
+    # Unspecified in manuscript; rational placeholder assuming regular, firm quotes only. Must be reconciled to the exact 2014 TAQ codebook.
+    quote_condition_keep_codes:
+      - "R"
+      
+    # Unspecified in manuscript; rational robustification placeholder.
+    require_bid_gt_zero: true
+    
+    # Unspecified in manuscript; rational robustification placeholder.
+    require_ask_gt_zero: true
+    
+    # Unspecified in manuscript; rational robustification placeholder.
+    require_bidsiz_gt_zero: true
+    
+    # Unspecified in manuscript; rational robustification placeholder.
+    require_asksiz_gt_zero: true
+    
+    # Unspecified in manuscript; rational robustification placeholder. Implements drop of locked/crossed quotes via ASK > BID.
+    require_ask_gt_bid: true
+    
+    # Required by the manuscript’s “last available midpoint price in each second t”.
+    second_bucket_rule: "floor_to_second"
+    
+    # Explicitly implied by manuscript.
+    within_second_quote_selector: "last_valid_quote"
+    
+    # Explicit in manuscript.
+    missing_second_fill_method: "last_observation_carried_forward"
+    
+    # Explicitly implied by manuscript.
+    carry_forward_within_day_only: true
+    
+    # Explicit in manuscript.
+    carry_across_overnight: false
+    
+    # Unspecified in manuscript; rational placeholder.
+    first_retained_second_initialization: "carry_forward_last_same_day_midpoint_before_session_start"
+    
+    # Explicit in manuscript Eq. (12).
+    midpoint_formula: "m_k(t) = (a_k(t) + b_k(t)) / 2"
+
+  # ------------------------------------------------------------------------------
+  # RETURN CONSTRUCTION AND STANDARDIZATION
+  # ------------------------------------------------------------------------------
+  return_construction_and_standardization:
+    # Explicit in manuscript.
+    log_return_horizon_seconds: 1
+    
+    # Explicit in manuscript.
+    return_computation_scope: "within_day_only"
+    
+    # Explicit in manuscript Eq. (13).
+    log_return_formula: "G_k(t, Δt) = ln(m_k(t+Δt)) - ln(m_k(t))"
+    
+    # Explicitly implied by manuscript.
+    standardization_scope: "full_retained_2014_intraday_sample"
+    
+    # Explicitly implied by Eq. (14).
+    mean_estimator: "full_sample_mean_per_stock"
+    
+    # Explicitly implied by Eq. (14).
+    variance_estimator: "full_sample_variance_per_stock"
+    
+    # Unspecified in manuscript; rational placeholder chosen for consistency with C = (1/T)MM^†.
+    variance_denominator: "T"
+    
+    # Explicit in manuscript Eq. (14).
+    normalization_formula: "M_k(t) = (G_k(t) - <G_k(t)>_t) / σ_k"
+
+  # ------------------------------------------------------------------------------
+  # SPECTRAL DECOMPOSITION AND WHITENING
+  # ------------------------------------------------------------------------------
+  spectral_decomposition:
+    # Explicit in manuscript.
+    correlation_measure: "Pearson"
+    
+    # Explicitly implied by manuscript.
+    correlation_estimation_window: "full_retained_2014_intraday_sample"
+    
+    # Explicit in manuscript Eq. (19).
+    correlation_formula: "C = (1/T) M M^†"
+    
+    # Correct mathematical property of Pearson C.
+    matrix_property_requirement: "symmetric_positive_semidefinite"
+    
+    # Explicitly stated in manuscript for their sample.
+    empirical_expectation_for_this_dataset: "positive_definite"
+    
+    # Unspecified in manuscript; rational placeholder.
+    eigensolver_class: "dense_symmetric_eigendecomposition"
+    
+    # Explicitly required to identify market/sector modes in the manuscript.
+    eigenvalue_sort_order: "descending"
+    
+    # Explicitly implied by R = Λ^{-1/2} U^† M over all K modes.
+    retain_all_modes_for_whitening: true
+    
+    # Explicit in manuscript.
+    whitening_square_root_branch: "positive"
+    
+    # Explicit in manuscript Eq. (21).
+    whitening_formula: "R = Λ^{-1/2} U^† M"
+    
+    # Explicit in manuscript.
+    top_modes_analyzed:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      
+    # Unspecified in manuscript; rational placeholder.
+    eigenvector_sign_rule_for_plots: "deterministic_sign_flip_for_visual_consistency_only"
+    
+    # Explicitly implied by figure description.
+    plot_stock_ordering_for_eigenvectors: "GICS_sector_order"
+
+  # ------------------------------------------------------------------------------
+  # STATIC EXTREME VALUE ANALYSIS
+  # ------------------------------------------------------------------------------
+  static_evt:
+    # Explicitly implied by manuscript.
+    positive_tail_series: "R_k"
+    
+    # Explicitly implied by manuscript’s negative-tail treatment.
+    negative_tail_series: "-R_k"
+    
+    # Explicit in manuscript’s main POT results (“without declustering extreme values”).
+    declustering_before_gpd_fit: false
+    
+    # Unspecified in manuscript; rational placeholder spanning the range shown in the figures.
+    tail_quantile_grid_alpha:
+      - 0.1
+      - 0.05
+      - 0.02
+      - 0.01
+      - 0.005
+      - 0.002
+      - 0.001
+      - 0.0005
+      - 0.0002
+      - 0.0001
+      
+    # Unspecified in manuscript; rational placeholder matching common NumPy/pandas/R default behavior.
+    quantile_interpolation_method: "type_7_linear"
+    
+    # Unspecified in manuscript; rational placeholder for Q-Q and NRMSD calculations.
+    empirical_cdf_plotting_position: "i/(n+1)"
+    
+    # Explicit in manuscript.
+    gpd_estimation_method: "maximum_likelihood"
+    
+    # Unspecified in manuscript; rational placeholder.
+    gpd_optimizer: "L-BFGS-B"
+    
+    # Unspecified in manuscript; rational placeholder to enforce sigma > 0.
+    gpd_sigma_parameterization: "sigma = exp(eta)"
+    
+    # Required by GPD support constraint.
+    gpd_support_enforcement: "require 1 + gamma * x_i / sigma > 0 for all exceedances"
+    
+    # Unspecified in manuscript; rational placeholder.
+    gpd_initial_gamma: 0.1
+    
+    # Unspecified in manuscript; rational placeholder.
+    gpd_initial_sigma: "sample_mean_excess"
+    
+    # Unspecified in manuscript; rational placeholder.
+    gpd_optimizer_maxiter: 10000
+    
+    # Unspecified in manuscript; rational placeholder.
+    gpd_optimizer_ftol: 1.0e-08
+    
+    # Unspecified in manuscript; rational placeholder.
+    gpd_optimizer_gtol: 1.0e-08
+    
+    # Explicit in manuscript Eq. (15).
+    ferro_segers_tau_condition: 2
+    
+    # Explicit in manuscript Eq. (17).
+    error_bar_calculation: "asymptotic_variance_from_fisher_information"
+    
+    # Explicit in manuscript Eq. (18).
+    goodness_of_fit_metric: "NRMSD"
+    
+    # Explicit in manuscript appendix.
+    qq_plot_enabled: true
+    
+    # Explicit in manuscript figure example.
+    example_alpha_positive_tail: 0.005
+    
+    # Explicit in manuscript figure example.
+    example_alpha_negative_tail: 0.005
+    
+    # Unspecified as an input in manuscript; empirical benchmark inferred from published figure.
+    example_threshold_u_positive_benchmark: 4.38
+    
+    # Unspecified as an input in manuscript; empirical benchmark inferred from published figure.
+    example_threshold_u_negative_benchmark: 4.59
+
+  # ------------------------------------------------------------------------------
+  # DYNAMIC ANALYSIS AND NON-STATIONARITY
+  # ------------------------------------------------------------------------------
+  dynamic_analysis:
+    # Explicit in manuscript Eq. (24).
+    intraday_profile_input_series: "|R_k|"
+    
+    # Explicit in manuscript.
+    intraday_seasonality_period: "T_day_return_intervals"
+    
+    # Explicit in manuscript Eq. (24).
+    intraday_profile_formula: "V_k(t_intra) = (1/N_days) * sum_d |R_k(d*T_day + t_intra)|"
+    
+    # Explicit in manuscript Eq. (25).
+    residual_series_formula: "tilde_R_k(t) = R_k(t) / V_k(t mod T_day)"
+    
+    # Explicit in manuscript.
+    residual_series_input: "R_k"
+    
+    # Explicitly implied by manuscript’s local-threshold analysis on deseasonalized residuals.
+    local_threshold_series: "tilde_R_k"
+    
+    # Explicit in manuscript.
+    rolling_window_size_W_seconds: 10000
+    
+    # Unspecified in manuscript; rational placeholder to avoid look-ahead bias.
+    rolling_window_alignment: "backward_looking_excluding_current_observation"
+    
+    # Unspecified in manuscript; rational placeholder.
+    rolling_window_min_periods: 10000
+    
+    # Unspecified in manuscript; rational placeholder.
+    drop_observations_before_full_window: true
+    
+    # Unspecified in manuscript; rational placeholder spanning the range discussed for rolling thresholds.
+    local_tail_quantile_grid_alpha:
+      - 0.01
+      - 0.005
+      - 0.002
+      - 0.001
+      - 0.0005
+      - 0.0002
+      - 0.0001
+      
+    # Explicit in manuscript figure example.
+    local_quantile_q_example: 0.999
+    
+    # Unspecified in manuscript; rational placeholder.
+    local_quantile_interpolation_method: "type_7_linear"
+    
+    # Explicitly consistent with the manuscript’s main rolling-threshold figure.
+    local_figures_focus_tail: "positive"
+
+  # ------------------------------------------------------------------------------
+  # BLOCK-MAXIMA INFERENCE FROM POT FITS
+  # ------------------------------------------------------------------------------
+  block_maxima_inference:
+    # Explicit in manuscript figure discussion.
+    inference_threshold_u_static_example: 15
+    
+    # Explicit in manuscript.
+    block_size_empirical: "1 trading day"
+    
+    # Derived from manuscript’s T_day.
+    block_size_return_intervals: 21899
+    
+    # Explicitly implied by manuscript’s daily-maxima comparison.
+    daily_maxima_source_series: "R_k_by_trading_day"
+    
+    # Unspecified in manuscript; standard EVT placeholder.
+    exceedance_probability_estimator_static: "empirical_exceedance_fraction"
+    
+    # Unspecified in manuscript; rational placeholder consistent with local quantile thresholding.
+    exceedance_probability_estimator_rolling: "alpha"
+    
+    # Unspecified in manuscript body; standard EVT conversion consistent with cited references.
+    gpd_to_gev_formula_gamma_nonzero: "a = sigma * (zeta_u * m)^gamma; b = u + (sigma/gamma) * ((zeta_u * m)^gamma - 1)"
+    
+    # Unspecified in manuscript body; standard EVT conversion consistent with cited references.
+    gpd_to_gev_formula_gamma_zero: "a = sigma; b = u + sigma * log(zeta_u * m)"
+    
+    # Explicit in manuscript Eq. (6).
+    linear_parameter_link: "sigma = a + gamma * (u - b)"
+
+  # ------------------------------------------------------------------------------
+  # DIAGNOSTICS, VALIDATION, AND FIGURE-LEVEL CONVENTIONS
+  # ------------------------------------------------------------------------------
+  diagnostics_and_plotting:
+    # Explicit in manuscript figures.
+    acf_series_static_modes: "|R_k|"
+    
+    # Explicit in manuscript figures.
+    acf_series_residual_modes: "|tilde_R_k|"
+    
+    # Explicit in manuscript figures.
+    acf_lag_resolution_seconds: 1
+    
+    # Unspecified in manuscript; rational placeholder for reproducible figure generation.
+    acf_max_lag_seconds: 10000
+    
+    # Unspecified in manuscript; rational placeholder.
+    acf_centering: "sample_mean"
+    
+    # Unspecified in manuscript; rational placeholder.
+    acf_denominator: "full_sample_variance"
+    
+    # Explicit in manuscript.
+    modes_for_evt_analysis:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      
+    # Explicit in manuscript figure example.
+    example_gpd_fit_mode: 1
+    
+    # Explicit in manuscript figure example.
+    example_rolling_threshold_mode: 2
+    
+    # Explicit in manuscript figure example.
+    example_nonstationary_pdf_mode: 2
+    
+    # Explicit in manuscript figure example.
+    nonstationary_pdf_plot_days: 40
+    
+    benchmark_checks:
+      # Explicit in manuscript.
+      expected_market_mode_index: 1
+      
+      # Explicit in manuscript interpretation.
+      expected_sector_mode_examples:
+        - 2
+        - 3
+        
+      expected_market_mode_interpretation: "broad_market"
+      expected_mode_2_interpretation: "energy_sector"
+      expected_mode_3_interpretation: "utility_sector"
