@@ -23,7 +23,7 @@
 [![Jupyter](https://img.shields.io/badge/Jupyter-%23F37626.svg?style=flat&logo=Jupyter&logoColor=white)](https://jupyter.org/)
 [![Open Source](https://img.shields.io/badge/Open%20Source-%E2%9D%A4-brightgreen)](https://github.com/extreme_value_analysis_correlated_systems)
 
-**Repository:** `https://github.com/extreme_value_analysis_correlated_systems`
+**Repository:** `https://github.com/chirindaopensource/extreme_value_analysis_correlated_systems`
 
 **Owner:** 2026 Craig Chirinda (Open Source Projects)
 
@@ -134,7 +134,7 @@ The project is designed around a single, top-level user-facing interface functio
 
 1.  **Clone the repository:**
     ```sh
-    git clone https://github.com/extreme_value_analysis_correlated_systems.git
+    git clone https://github.com/chirindaopensource/extreme_value_analysis_correlated_systems.git
     cd extreme_value_analysis_correlated_systems
     ```
 
@@ -264,7 +264,7 @@ If you use this code or the methodology in your research, please cite the origin
 For the implementation itself, you may cite this repository:
 ```
 Chirinda, C. (2026). Extreme Value Analysis for Finite, Multivariate and Correlated Systems: An Open Source Implementation.
-GitHub repository: https://github.com/extreme_value_analysis_correlated_systems
+GitHub repository: https://github.com/chirindaopensource/extreme_value_analysis_correlated_systems
 ```
 
 ## Acknowledgments
